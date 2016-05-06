@@ -1,0 +1,17 @@
+# Server name (max. 8 characters)
+ServerName: default
+
+# Configuration for MySQL
+MySQL:
+  Hostname: localhost
+  Username: ${name}
+  Password: ${name}Password
+  Database: ${name}
+
+# After this mumber of seconds, a stored chest will expire and it will get deleted.
+TimeLimit: 43200
+
+# List of Bukkit IDs that can be stored
+AllowedBlocks:
+- CHEST
+- IRONCHEST_BLOCKIRONCHEST

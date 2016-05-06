@@ -1,0 +1,14 @@
+name: ${name}
+main: ${package}.${name}
+version: ${version}
+author: KaiNoMood
+
+commands:
+   ${name}:
+      description: Manage ${name}
+      aliases: br
+
+permissions:
+    br.manage:
+        description: Manage ${name}
+        default: op
