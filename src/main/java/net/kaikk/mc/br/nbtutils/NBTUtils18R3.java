@@ -46,7 +46,6 @@ public class NBTUtils18R3 extends NBTUtils {
 	public String toString(Block block) throws Exception {
 		// Get block info
 		NBTTagCompound baseTag = new NBTTagCompound();
-		//NBTTagCompound blockTag = toNBT(block.getState().getData().toItemStack());
 		NBTTagCompound blockTag = new NBTTagCompound();
 		blockTag.setInt("id", block.getState().getTypeId());
 		blockTag.setByte("data", block.getState().getData().getData());
