@@ -66,8 +66,7 @@ public class DataStore {
 			connectionProps.put("user", this.username);
 			connectionProps.put("password", this.password);
 			
-			this.db = DriverManager.getConnection(this.dbUrl, connectionProps); 
-			this.statement().executeUpdate("SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+			this.db = DriverManager.getConnection(this.dbUrl, connectionProps);
 		}
 	}
 	
