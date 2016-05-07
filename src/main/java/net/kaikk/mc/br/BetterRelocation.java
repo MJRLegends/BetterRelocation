@@ -46,6 +46,10 @@ public class BetterRelocation extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
+		if (ds!=null) {
+			ds.dbClose();
+		}
+		
 		instance=null;
 	}
 
