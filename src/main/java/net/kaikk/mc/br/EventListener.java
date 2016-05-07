@@ -120,6 +120,11 @@ class EventListener implements Listener {
 		} else {
 			// retrieve block
 			try {
+				if (block.getType()!=Material.AIR) {
+					player.sendMessage(ChatColor.RED+BetterRelocation.chatPrefix+"There is a block in this location already!");
+					return;
+				}
+				
 				// check per server permissions
 				StringBuilder playerPerms = new StringBuilder();
 				for (String srv : Utils.playerPerms(player)) {
