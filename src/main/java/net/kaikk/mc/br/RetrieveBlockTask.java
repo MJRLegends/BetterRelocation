@@ -45,11 +45,7 @@ class RetrieveBlockTask implements Runnable {
 							statement.executeUpdate("COMMIT");
 							instance.blockUnlock(block);
 						} catch (Exception e) {
-							try {
-								statement.executeUpdate("ROLLBACK");
-							} catch (SQLException e1) {
-								e1.printStackTrace();
-							}
+							instance.ds.rollback();
 							e.printStackTrace();
 							player.sendMessage(ChatColor.RED+BetterRelocation.chatPrefix+"An error occurred while retrieving the block!");
 							block.setType(Material.AIR);
@@ -59,10 +55,11 @@ class RetrieveBlockTask implements Runnable {
 			} else {
 				player.sendMessage(ChatColor.RED+BetterRelocation.chatPrefix+"No available blocks!");
 				instance.blockUnlock(block);
+				instance.ds.rollback();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			block.setType(Material.AIR);
+			instance.ds.rollback();
 		}
 	}
 
