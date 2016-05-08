@@ -27,12 +27,37 @@ public class Utils {
 		return perms;
 	}
 
-	public static boolean doubleChestCheck(Block block) {
+	public static boolean isDoubleChest(Block block) {
 		Material chestType = block.getType();
 		if (chestType != Material.CHEST && chestType != Material.TRAPPED_CHEST) {
 			return false;
 		}
 		
+		Block sb = block.getRelative(BlockFace.EAST);
+		if (sb.getType()==chestType) {
+			return true;
+		}
+		
+		sb = block.getRelative(BlockFace.WEST);
+		if (sb.getType()==chestType) {
+			return true;
+		}
+		
+		sb = block.getRelative(BlockFace.NORTH);
+		if (sb.getType()==chestType) {
+			return true;
+		}
+		
+		sb = block.getRelative(BlockFace.SOUTH);
+		if (sb.getType()==chestType) {
+			return true;
+		}
+	
+		return false;
+	}
+
+
+	public static boolean isVanillaChestNear(Block block) {
 		Block sb = block.getRelative(BlockFace.EAST);
 		if (sb.getType()==Material.CHEST || sb.getType()==Material.TRAPPED_CHEST) {
 			return true;
@@ -55,7 +80,6 @@ public class Utils {
 	
 		return false;
 	}
-
 
 	final static Pattern idStartTag = Pattern.compile("[,\\[\\{]\"[iI][dD]\":[^\"]");
 	final static Pattern idEndTag = Pattern.compile("[\\.,\\}]");

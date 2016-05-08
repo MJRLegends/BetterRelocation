@@ -71,7 +71,7 @@ class EventListener implements Listener {
 				}
 				
 				// no double chests
-				if (Utils.doubleChestCheck(block)) {
+				if (Utils.isDoubleChest(block)) {
 					throw new Exception("Double chests are not allowed.");
 				}
 				
@@ -119,43 +119,41 @@ class EventListener implements Listener {
 			event.setCancelled(true);
 		} else {
 			// retrieve block
-			try {
-				if (block.getType()!=Material.AIR) {
-					player.sendMessage(ChatColor.RED+BetterRelocation.chatPrefix+"There is a block in this location already!");
-					return;
-				}
-				
-				// check per server permissions
-				StringBuilder playerPerms = new StringBuilder();
-				for (String srv : Utils.playerPerms(player)) {
-					playerPerms.append("\""+srv+"\",");
-				}
-				if (playerPerms.length()==0) {
-					player.sendMessage(ChatColor.RED+BetterRelocation.chatPrefix+"You don't have permissions to retrieve blocks!");
-					return;
-				}
-				playerPerms.setLength(playerPerms.length()-1);
-				
-				// disallow any other BetterRelocation operations on this block until the retrieve is completed
-				instance.blockLock(block);
-				
-				// call event
-				RetrieveEvent storeEvent = new RetrieveEvent(player, block);
-				Bukkit.getPluginManager().callEvent(storeEvent);
-				if (storeEvent.isCancelled()) {
-					throw new Exception("An event has cancelled this operation");
-				}
-				
-				if (Utils.doubleChestCheck(block)) {
-					throw new Exception("You can't place this chest near other vanilla chests.");
-				}
-
-				// asynchronously retrieve the block
-				player.sendMessage(ChatColor.GREEN+BetterRelocation.chatPrefix+"Please wait while we process your request...");
-				instance.executor.submit(new RetrieveBlockTask(instance, player, block, playerPerms.toString()));
-			} catch (Exception e) {
-				player.sendMessage(ChatColor.RED+BetterRelocation.chatPrefix+e.getMessage());
+			if (block.getType()!=Material.AIR) {
+				player.sendMessage(ChatColor.RED+BetterRelocation.chatPrefix+"There is a block in this location already!");
+				return;
 			}
+			
+			if (Utils.isVanillaChestNear(block)) {
+				player.sendMessage(ChatColor.RED+BetterRelocation.chatPrefix+"You can't place this chest near other vanilla chests.");
+				return;
+			}
+			
+			// check per server permissions
+			StringBuilder playerPerms = new StringBuilder();
+			for (String srv : Utils.playerPerms(player)) {
+				playerPerms.append("\""+srv+"\",");
+			}
+			if (playerPerms.length()==0) {
+				player.sendMessage(ChatColor.RED+BetterRelocation.chatPrefix+"You don't have permissions to retrieve blocks!");
+				return;
+			}
+			playerPerms.setLength(playerPerms.length()-1);
+			
+			// disallow any other BetterRelocation operations on this block until the retrieve is completed
+			instance.blockLock(block);
+			
+			// call event
+			RetrieveEvent storeEvent = new RetrieveEvent(player, block);
+			Bukkit.getPluginManager().callEvent(storeEvent);
+			if (storeEvent.isCancelled()) {
+				player.sendMessage(ChatColor.RED+BetterRelocation.chatPrefix+"An event has cancelled this operation");
+				return;
+			}
+			
+			// asynchronously retrieve the block
+			player.sendMessage(ChatColor.GREEN+BetterRelocation.chatPrefix+"Please wait while we process your request...");
+			instance.executor.submit(new RetrieveBlockTask(instance, player, block, playerPerms.toString()));
 			
 			if (block.getState() instanceof Chest) {
 				event.setCancelled(true);
