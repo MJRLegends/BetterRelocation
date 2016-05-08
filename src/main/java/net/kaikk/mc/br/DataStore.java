@@ -70,6 +70,22 @@ public class DataStore {
 		}
 	}
 	
+	void startTransaction() throws SQLException {
+		this.statement().executeUpdate("START TRANSACTION");
+	}
+	
+	void commit() throws SQLException {
+		this.statement().executeUpdate("COMMIT");
+	}
+	
+	void rollback() {
+		try {
+			this.statement().executeUpdate("ROLLBACK");
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
 	void dbClose()  {
 		try {
 			if (!this.db.isClosed()) {
