@@ -92,9 +92,6 @@ class EventListener implements Listener {
 					}
 				}
 				
-				// disallow any other BetterRelocation operations on this block until the store is completed
-				instance.blockLock(block);
-				
 				// call event
 				StoreEvent storeEvent = new StoreEvent(player, block);
 				Bukkit.getPluginManager().callEvent(storeEvent);
@@ -109,6 +106,9 @@ class EventListener implements Listener {
 					e1.printStackTrace();
 					throw new Exception("An error occurred while retrieving NBT data for this block");
 				}
+				
+				// disallow any other BetterRelocation operations on this block until the store is completed
+				instance.blockLock(block);
 				
 				// asynchronously store the block
 				player.sendMessage(ChatColor.GREEN+BetterRelocation.chatPrefix+"Please wait while we process your request...");
@@ -140,9 +140,6 @@ class EventListener implements Listener {
 			}
 			playerPerms.setLength(playerPerms.length()-1);
 			
-			// disallow any other BetterRelocation operations on this block until the retrieve is completed
-			instance.blockLock(block);
-			
 			// call event
 			RetrieveEvent storeEvent = new RetrieveEvent(player, block);
 			Bukkit.getPluginManager().callEvent(storeEvent);
@@ -150,6 +147,9 @@ class EventListener implements Listener {
 				player.sendMessage(ChatColor.RED+BetterRelocation.chatPrefix+"An event has cancelled this operation");
 				return;
 			}
+			
+			// disallow any other BetterRelocation operations on this block until the retrieve is completed
+			instance.blockLock(block);
 			
 			// asynchronously retrieve the block
 			player.sendMessage(ChatColor.GREEN+BetterRelocation.chatPrefix+"Please wait while we process your request...");
