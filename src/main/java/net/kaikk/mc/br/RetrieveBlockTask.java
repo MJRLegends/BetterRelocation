@@ -56,10 +56,23 @@ class RetrieveBlockTask implements Runnable {
 				player.sendMessage(ChatColor.RED+BetterRelocation.chatPrefix+"No available blocks!");
 				instance.blockUnlock(block);
 				instance.ds.rollback();
+				new BukkitRunnable() {
+					@Override
+					public void run() {
+						block.setType(Material.AIR);
+					}
+				}.runTask(instance);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			instance.ds.rollback();
+			instance.blockUnlock(block);
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					block.setType(Material.AIR);
+				}
+			}.runTask(instance);
 		}
 	}
 

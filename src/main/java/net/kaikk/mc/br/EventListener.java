@@ -148,6 +148,9 @@ class EventListener implements Listener {
 				return;
 			}
 			
+			// Place an empty chest on the block location
+			block.setType(Material.CHEST);
+			
 			// disallow any other BetterRelocation operations on this block until the retrieve is completed
 			instance.blockLock(block);
 			
